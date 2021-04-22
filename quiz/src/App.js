@@ -17,6 +17,8 @@ export default function App() {
     const[answerList,setAnswerList]=useState([]);
     const[qColor, setQColor]=useState({color:'black'});
     const[firstRun,setFirstRun]=useState(true);
+    const[btnStatus,setBtnStatus]=useState(false);
+
       if(firstRun===true){
         answerList.push(props.question.correct_answer);
         let x = 0;
@@ -36,14 +38,18 @@ export default function App() {
     return(
       <div>
         <p style={qColor}>{props.question.question}</p>
-        {answerList.map(answers => (<button onClick={()=>
+        {answerList.map(answers => (<button 
+        disabled={btnStatus} 
+        onClick={()=>
         {if(answers===props.question.correct_answer){
             console.log("Correct Answer Chosen");
            setQColor({color:'green'});
+           setBtnStatus(true);
         }
           else{
             console.log("Incorrect Answer Chosen");
            setQColor({color:'red'});
+           setBtnStatus(true);
           }
         }}>{answers}</button>))}
       </div>
