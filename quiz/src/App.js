@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './App.css'
+import {decode} from 'html-entities';
 export default function App() {
   const [questions, setQuestions] = useState([]);
   const numOfQs = 10;
@@ -37,7 +38,7 @@ export default function App() {
 
     return(
       <div>
-        <p style={qColor}>{props.question.question}</p>
+        <p style={qColor}>{decode(props.question.question)}</p>
         {answerList.map(answers => (<button 
         disabled={btnStatus} 
         onClick={()=>
@@ -51,7 +52,7 @@ export default function App() {
            setQColor({color:'red'});
            setBtnStatus(true);
           }
-        }}>{answers}</button>))}
+        }}>{decode(answers)}</button>))}
       </div>
 
     );
