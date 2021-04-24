@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from "react";
 import './App.css'
 import {decode} from 'html-entities';
+import { Button } from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core/styles';
 export default function App() {
   const [questions, setQuestions] = useState([]);
-  const numOfQs = 10;
-  useEffect(() => {
-    fetch('https://opentdb.com/api.php?amount='+numOfQs)
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setQuestions(res.results);
-      });
-  }, []);
+  //const [firstRun, setFirstRun] = useState(true);
+  const [qNum, setQNum] = useState(10);
+
+    useEffect(() => {
+      fetch('https://opentdb.com/api.php?amount='+qNum)
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          setQuestions(res.results);
+        });
+    }, []);
 
   function Question(props){
-
     const[answerList,setAnswerList]=useState([]);
     const[qColor, setQColor]=useState({color:'black'});
     const[firstRun,setFirstRun]=useState(true);
@@ -39,7 +42,7 @@ export default function App() {
     return(
       <div>
         <p style={qColor}>{decode(props.question.question)}</p>
-        {answerList.map(answers => (<button 
+        {answerList.map(answers => (<Button style={{margin:7}} variant="contained" color="primary"
         disabled={btnStatus} 
         onClick={()=>
         {if(answers===props.question.correct_answer){
@@ -52,20 +55,38 @@ export default function App() {
            setQColor({color:'red'});
            setBtnStatus(true);
           }
-        }}>{decode(answers)}</button>))}
+        }}>{decode(answers)}</Button>))}
       </div>
 
     );
 
   };
 
-  return (
-    <div class="centered">
-      <h1>👾 Quiz Time! 🤖</h1>
-      {questions.map((question) => (
-        <Question question={question}/>
-      ))}
-    </div>
-  );
-
-};
+  /*
+  if(firstRun===true){
+    return(
+      <div class="centered">
+        <h1>👾 Quiz Time! 🤖</h1>
+        <form>
+        <label>
+          No. of Questions:
+          <input type="number" onChange={evt=>setQNum(evt.target.value)}/>
+        </label>
+        <button onClick={()=>{
+          setFirstRun(false);
+        }}>Start</button>
+        </form>
+      </div>
+    )
+  }
+  else{
+    */
+    return (
+      <div class="centered">
+        <h1>👾 Quiz Time! 🤖</h1>
+        {questions.map((question) => (
+          <Question question={question}/>
+        ))}
+      </div>
+    );
+  };
